@@ -1,12 +1,12 @@
 import streamlit as st
 from src.rag_pipeline import ask_rag
 
-st.set_page_config(page_title="MedAssist RAG", page_icon="🩺", layout="wide")
+st.set_page_config(page_title="WHO Assistant", page_icon="🩺", layout="wide")
 
 with st.sidebar:
     st.header("ℹ️ About")
-    st.write("This assistant answers questions using hospital policies, guidelines, and medical documents.")
-    st.write("It does not provide personal medical advice.")
+    st.write("This assistant answers questions using policies, guidelines defined by the World Health Organization.")
+    st.write("It does not provide personal health advice.")
 
 # Custom CSS for nicer chat bubbles
 st.markdown("""
@@ -30,8 +30,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🩺 MedAssist – Healthcare RAG Assistant")
-st.caption("Answers based only on trusted medical documents")
+st.title("🩺 WHO Assistant")
+st.caption("Answers based on published WHO documents")
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -43,7 +43,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Chat input box at bottom
-if prompt := st.chat_input("Ask a healthcare policy or guideline question..."):
+if prompt := st.chat_input("Ask a policy or guideline question..."):
     # Save user message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -51,14 +51,14 @@ if prompt := st.chat_input("Ask a healthcare policy or guideline question..."):
 
     # Generate assistant response
     with st.chat_message("assistant"):
-        with st.spinner("🔍 Searching medical knowledge base..."):
+        with st.spinner("Searching knowledge base..."):
             response, sources = ask_rag(prompt)
 
         st.markdown(response)
 
         # Show sources
         if sources:
-            with st.expander("📚 Sources"):
+            with st.expander("Sources"):
                 for src in sources:
                     st.write(f"- {src}")
 
